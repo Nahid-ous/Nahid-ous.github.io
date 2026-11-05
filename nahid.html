@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parvez Md Nahid</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column with a live Ising-lattice anneal in the hero; sections as labelled rows (label left, content right) that stack on phones */
+:root{
+  --bg:#F2F4F7; --surface:#FFFFFF; --ink:#18202E; --muted:#5A6577;
+  --rule:#D9DEE6; --accent:#2B4C9B; --warm:#C2571F; --up:#2B4C9B; --down:#E6E9EF;
+  --display:"Spectral", Georgia, "Times New Roman", serif;
+  --body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10141C; --surface:#171C26; --ink:#E6E9EF; --muted:#98A2B3;
+  --rule:#2A3140; --accent:#8FA9EA; --warm:#F08A52; --up:#8FA9EA; --down:#232A38; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10141C; --surface:#171C26; --ink:#E6E9EF; --muted:#98A2B3;
+  --rule:#2A3140; --accent:#8FA9EA; --warm:#F08A52; --up:#8FA9EA; --down:#232A38; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wrap{max-width:960px;margin:0 auto;padding-block:48px 64px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0}
+.mono{font-family:var(--mono);font-size:.8rem;letter-spacing:.02em}
+
+nav{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;align-items:baseline;
+  padding-bottom:16px;border-bottom:1px solid var(--rule);margin-bottom:40px}
+nav .who{font-family:var(--display);font-weight:600;font-size:1.05rem}
+nav ul{display:flex;flex-wrap:wrap;gap:4px 18px;list-style:none;margin:0;padding:0}
+nav a{color:var(--muted);text-decoration:none;font-size:.9rem}
+nav a:hover{color:var(--ink)}
+
+.hero{display:grid;grid-template-columns:1.35fr 1fr;gap:40px;align-items:center;margin-bottom:56px}
+.hero > div{min-width:0}
+.hero h1{font-size:clamp(2.2rem,5.5vw,3.4rem);line-height:1.08;letter-spacing:-.01em}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--accent)}
+.hero .role{color:var(--muted);margin:14px 0 18px;font-size:1.05rem}
+.hero p{max-width:58ch;margin:0 0 14px}
+.status{display:inline-flex;gap:8px;align-items:center;font-size:.9rem;
+  border:1px solid var(--rule);background:var(--surface);padding:6px 12px;border-radius:999px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--warm);display:block}
+.lattice{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:14px}
+.lattice canvas{width:100%;aspect-ratio:1/1;max-width:100%;display:block;border-radius:2px}
+.readout{display:flex;justify-content:space-between;gap:8px;color:var(--muted);margin-top:10px;font-variant-numeric:tabular-nums}
+.cap{color:var(--muted);font-size:.8rem;margin-top:6px}
+
+section{display:grid;grid-template-columns:180px 1fr;gap:12px 32px;padding-block:32px;border-top:1px solid var(--rule)}
+section > h2{font-size:1.25rem;padding-top:2px}
+section > div{min-width:0}
+.interests{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.interests li{border:1px solid var(--rule);background:var(--surface);padding:4px 12px;border-radius:4px;font-size:.92rem}
+
+.proj{display:grid;gap:22px}
+.proj article{display:grid;gap:4px}
+.proj h3{font-size:1.12rem}
+.proj .meta{color:var(--muted)}
+.proj p{margin:2px 0 0;max-width:64ch}
+.figure{font-family:var(--mono);color:var(--warm);font-weight:500}
+
+ol.timeline{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+ol.timeline li{display:grid;grid-template-columns:96px 1fr;gap:16px}
+ol.timeline time{color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
+.kind{display:inline-block;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--accent);margin-right:6px}
+
+.tools{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 0;padding:0;list-style:none}
+.tools li{font-family:var(--mono);font-size:.85rem}
+.tools li::after{content:"·";margin-left:14px;color:var(--rule)}
+.tools li:last-child::after{content:""}
+dl.grid{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:0}
+dt{color:var(--muted);font-size:.9rem}
+dd{margin:0}
+
+.contact-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.email{font-family:var(--mono);font-size:.95rem;user-select:all;background:var(--surface);
+  border:1px solid var(--rule);padding:6px 10px;border-radius:4px}
+button{font:inherit;font-size:.85rem;background:var(--ink);color:var(--bg);border:0;border-radius:4px;padding:7px 12px;cursor:pointer}
+footer{margin-top:40px;color:var(--muted);font-size:.85rem}
+
+@media (max-width:720px){
+  .hero{grid-template-columns:1fr;gap:28px}
+  .lattice{max-width:340px}
+  section{grid-template-columns:1fr}
+  ol.timeline li{grid-template-columns:1fr;gap:0}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <span class="who">P. M. Nahid</span>
+    <ul>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#news">Publications &amp; awards</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>Parvez Md Nahid<br><em>quantum optimization</em></h1>
+      <div class="role">BSc candidate, AI &amp; Data Science · Okayama University of Science · Soft Computing Laboratory (Prof. Chonho Lee)</div>
+      <p>I formulate real engineering problems as QUBO / Ising models and solve them with quantum annealing. My thesis couples Factorization Machine Quantum Annealing (FMQA) with CFD to design better vortex cups. I am now moving toward the theory side: how quantum algorithms are built, and how to design new ones.</p>
+      <span class="status"><i></i>Open to PhD positions in quantum computing from 2027</span>
+    </div>
+    <figure class="lattice" style="margin:0" aria-label="Animated simulated annealing of a 2D Ising spin lattice">
+      <canvas id="ising" width="320" height="320"></canvas>
+      <div class="readout mono"><span id="tT">T = 3.00</span><span id="tE">E/N = −0.00</span><span id="tM">|m| = 0.00</span></div>
+      <figcaption class="cap">2D Ising model, 32×32 spins, Metropolis updates while T cools toward 0. Domains merge as the system settles into low energy.</figcaption>
+    </figure>
+  </header>
+
+  <section id="research">
+    <h2>Research interests</h2>
+    <div>
+      <ul class="interests">
+        <li>Quantum annealing</li><li>QUBO &amp; Ising formulations</li><li>Black-box optimization (FMQA)</li>
+        <li>Quantum algorithms</li><li>Quantum machine learning</li><li>Fault-tolerant QC &amp; error correction</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="proj">
+      <article>
+        <h3>Design optimization of vortex cups using FMQA and CFD</h3>
+        <span class="meta mono">BSc thesis · 2025–2027 · co-supervised with Kobayashi Wataru</span>
+        <p>A factorization machine learns a QUBO surrogate from OpenFOAM simulations; quantum annealing (Fixstars Amplify) proposes the next design. The loop improved suction force by <span class="figure">5×</span>. Now extending to more design parameters to raise optimization efficiency.</p>
+      </article>
+      <article>
+        <h3>IoT flood-sensor placement via QUBO</h3>
+        <span class="meta mono">Collaboration with Chiang Mai University · upcoming</span>
+        <p>Minimize the number of flood sensors while covering a wide area, as the backbone of a citizen smartphone alert system.</p>
+      </article>
+      <article>
+        <h3>Other QUBO / FMQA applications</h3>
+        <span class="meta mono">Lab projects</span>
+        <p>Drone blade optimization, fish gene regulatory network inference, and truck loading-order optimization for a beverage logistics problem (mentoring junior lab members).</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="news">
+    <h2>Publications, talks &amp; awards</h2>
+    <div>
+      <ol class="timeline">
+        <li><time class="mono">Sep 2026</time><div><span class="kind">Talk</span>Presentation at Institute of Science Tokyo.</div></li>
+        <li><time class="mono">Jun 2026</time><div><span class="kind">Paper</span>Vortex cup design optimization with FMQA and CFD. Japan Fluid Power System Society (JFPS) Conference. With C. Lee and W. Kobayashi.</div></li>
+        <li><time class="mono">Mar 2026</time><div><span class="kind">Award</span>NEDO Award (3rd place), TAQUMI Quantum Computing Hackathon, Waseda University.</div></li>
+        <li><time class="mono">2 years</time><div><span class="kind">Award</span>Kobayashi Foundation Scholarship for Outstanding Academic Achievement, two consecutive years.</div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Background</h2>
+    <div>
+      <dl class="grid">
+        <dt>Education</dt><dd>BSc, AI &amp; Data Science, Okayama University of Science (expected Mar 2027)</dd>
+        <dt>Teaching</dt><dd>Teaching Assistant, Data Structures &amp; Algorithms</dd>
+        <dt>Languages</dt><dd>Bengali (native), English, Japanese</dd>
+        <dt>Tools</dt><dd><ul class="tools"><li>Fixstars Amplify</li><li>D-Wave</li><li>OpenJij</li><li>IBM Quantum</li><li>Gurobi</li><li>OpenFOAM</li><li>Python</li><li>Git</li><li>AWS</li></ul></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div>
+      <p style="margin:0 0 10px">Happy to talk about research collaboration or PhD opportunities.</p>
+      <div class="contact-row">
+        <span class="email" id="email">a23i462by@ous.jp</span>
+        <button id="copy" type="button">Copy email</button>
+      </div>
+      <p class="mono" style="color:var(--muted);margin:12px 0 0">Okayama, Japan · JST (UTC+9)</p>
+    </div>
+  </section>
+
+  <footer>© 2026 Parvez Md Nahid</footer>
+</div>
+
+<script>
+(function(){
+  const btn=document.getElementById('copy');
+  btn.addEventListener('click',()=>{
+    const t=document.getElementById('email').textContent;
+    const ok=()=>{btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy email',1600)};
+    const fallback=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('email'));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected, press Ctrl+C'};
+    try{navigator.clipboard.writeText(t).then(ok,fallback)}catch(e){fallback()}
+  });
+
+  const N=32, cv=document.getElementById('ising'), ctx=cv.getContext('2d');
+  const s=new Int8Array(N*N), cell=cv.width/N;
+  const tT=document.getElementById('tT'), tE=document.getElementById('tE'), tM=document.getElementById('tM');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let T, frames=0;
+  const idx=(x,y)=>((y+N)%N)*N+((x+N)%N);
+  function reset(){for(let i=0;i<s.length;i++)s[i]=Math.random()<.5?1:-1;T=3.0;frames=0}
+  function sweep(){
+    for(let k=0;k<N*N;k++){
+      const x=Math.random()*N|0,y=Math.random()*N|0,i=y*N+x;
+      const nb=s[idx(x+1,y)]+s[idx(x-1,y)]+s[idx(x,y+1)]+s[idx(x,y-1)];
+      const dE=2*s[i]*nb;
+      if(dE<=0||Math.random()<Math.exp(-dE/T))s[i]=-s[i];
+    }
+  }
+  function stats(){let e=0,m=0;for(let y=0;y<N;y++)for(let x=0;x<N;x++){const v=s[y*N+x];m+=v;e-=v*(s[idx(x+1,y)]+s[idx(x,y+1)])}return[e/(N*N),Math.abs(m)/(N*N)]}
+  function draw(){
+    const cs=getComputedStyle(document.documentElement);
+    const up=cs.getPropertyValue('--up').trim(), dn=cs.getPropertyValue('--down').trim();
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){ctx.fillStyle=s[y*N+x]>0?up:dn;ctx.fillRect(x*cell,y*cell,cell,cell)}
+    const [e,m]=stats();
+    tT.textContent='T = '+T.toFixed(2); tE.textContent='E/N = '+e.toFixed(2).replace('-','−'); tM.textContent='|m| = '+m.toFixed(2);
+  }
+  reset();
+  if(reduce){T=1.2;for(let i=0;i<60;i++)sweep();draw();return}
+  for(let i=0;i<8;i++)sweep(); draw();
+  function step(){
+    sweep(); T=Math.max(0.05,T*0.985); frames++;
+    draw();
+    if(frames>420)reset();
+    setTimeout(()=>requestAnimationFrame(step),40);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
